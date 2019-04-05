@@ -90,7 +90,7 @@ public class populateDB {
 		companyColl.insertMany(compDocs);
 
 		System.out.println("Finished Insertmethod");
-
+		mongoClient.close();
 	}
 
 }

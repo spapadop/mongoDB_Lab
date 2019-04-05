@@ -36,5 +36,6 @@ public class Q1 {
 		} finally {
 			cursor.close();
 		}
+		mongoClient.close();
 	}
 }
