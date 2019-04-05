@@ -1,17 +1,8 @@
-import com.devskiller.jfairy.Fairy;
-import com.devskiller.jfairy.producer.company.Company;
-import com.devskiller.jfairy.producer.person.Person;
 import org.bson.Document;
-
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-
 import com.mongodb.client.MongoCursor;
-
-import java.util.List;
-import java.util.Set;
-
 import static com.mongodb.client.model.Filters.*;
 
 public class Q1 {
@@ -23,32 +14,27 @@ public class Q1 {
 	private static MongoCursor<Document> cursor;
 
 	public static void execute() {
-
 		mongoClient = new MongoClient();
 		db = mongoClient.getDatabase("test");
-
 		peopleColl = db.getCollection("People");
 		companyColl = db.getCollection("Companies");
-
 		cursor = peopleColl.find().iterator();
-		Document person = null;
-		Document comp = null;
+
+		Document person;
+		Document comp;
 		int counter = 0;
 		String domain = null;
-		try {
 
+		try {
 			while (cursor.hasNext()) {
 				person = cursor.next();
 				// bulk load or single load?? --> change to bulk
 				comp = companyColl.find(eq("name", person.get("company"))).first();
 				domain = "not found";
 				if(comp !=null) {
-					domain = comp.get("name").toString();
+					domain = comp.get("domain").toString();
 				}
-				System.out.println("firstname" + person.get("firstname")
-						+ " lastname: "+ person.get("lastname") + " domain: "
-				);
-
+				System.out.println(person.get("firstname") + " " + person.get("lastname") + "\t\t\t" + domain);
 
 				counter++;
 			}
