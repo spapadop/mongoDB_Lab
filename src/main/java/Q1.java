@@ -22,28 +22,19 @@ public class Q1 {
 
 		Document person;
 		Document comp;
-		int counter = 0;
-		String domain = null;
-
+		String domain = "not found";
 		try {
 			while (cursor.hasNext()) {
 				person = cursor.next();
 				// bulk load or single load?? --> change to bulk
 				comp = companyColl.find(eq("name", person.get("company"))).first();
-				domain = "not found";
 				if(comp !=null) {
 					domain = comp.get("domain").toString();
 				}
 				System.out.println(person.get("firstname") + " " + person.get("lastname") + "\t\t\t" + domain);
-
-				counter++;
 			}
 		} finally {
 			cursor.close();
 		}
-		System.out.println("Read " + counter + "lines");
-
-
 	}
-
 }
