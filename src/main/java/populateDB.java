@@ -1,17 +1,15 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.bson.Document;
-
 import com.devskiller.jfairy.Fairy;
 import com.devskiller.jfairy.producer.company.Company;
 import com.devskiller.jfairy.producer.person.Person;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class populateDB {
 

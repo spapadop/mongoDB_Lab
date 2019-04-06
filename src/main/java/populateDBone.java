@@ -6,9 +6,6 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class populateDBone {
 
     private static MongoClient mongoClient;
@@ -58,11 +55,11 @@ public class populateDBone {
             }
 
             Document companyDocument = new Document();
-            companyDocument.put("_id",company.getName());
+            companyDocument.put("_id", company.getName());
             if (companyColl.countDocuments(companyDocument) == 0) {
-                companyDocument.put("domain",company.getDomain());
-                companyDocument.put("email",company.getEmail());
-                companyDocument.put("url",company.getUrl());
+                companyDocument.put("domain", company.getDomain());
+                companyDocument.put("email", company.getEmail());
+                companyDocument.put("url", company.getUrl());
 
                 companyColl.insertOne(companyDocument);
             }
