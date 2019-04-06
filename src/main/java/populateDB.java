@@ -42,8 +42,6 @@ public class populateDB {
 		companyColl = db.getCollection("Companies");
 		peopleColl.drop();
 		companyColl.drop();
-		peopleColl = db.getCollection("People");
-		companyColl = db.getCollection("Companies");
 
 		personDocs = new ArrayList<Document>();
 		compDocs = new ArrayList<Document>();
