@@ -23,18 +23,21 @@ public class Q2 {
 	private static MongoCollection<Document> companyColl;
 	private static MongoCursor<Document> cursor;
 
-	public static void execute() {
+	public static void open(){
 		mongoClient = new MongoClient();
 		db = mongoClient.getDatabase("test");
 		peopleColl = db.getCollection("People");
 		companyColl = db.getCollection("Companies");
-		cursor = companyColl.find().iterator();
+	}
 
+	public static void execute() {
+		open();
+		cursor = companyColl.find().iterator();
 		AggregateIterable<Document> q2 = companyColl.aggregate(Arrays.asList(
 				new Document("$lookup", new Document()
 						.append("from","People")
-						.append("localField","name")
-						.append("foreignField","company")
+						.append("localField","_id")
+						.append("foreignField","worksIn")
 						.append("as","employees")
 				),
 				new Document("$project", new Document()

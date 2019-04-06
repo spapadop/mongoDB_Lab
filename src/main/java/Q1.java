@@ -1,9 +1,13 @@
+import com.mongodb.client.AggregateIterable;
 import org.bson.Document;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCursor;
-import static com.mongodb.client.model.Filters.*;
+
+import java.util.Arrays;
+import java.util.List;
+
 
 public class Q1 {
 
@@ -13,11 +17,14 @@ public class Q1 {
 	private static MongoCollection<Document> companyColl;
 	private static MongoCursor<Document> cursor;
 
-	public static void execute() {
+	public static void open(){
 		mongoClient = new MongoClient();
 		db = mongoClient.getDatabase("test");
 		peopleColl = db.getCollection("People");
-		companyColl = db.getCollection("Companies");
+	}
+
+	public static void execute() {
+		open();
 		cursor = peopleColl.find().iterator();
 
 		Document person;
@@ -26,12 +33,27 @@ public class Q1 {
 		try {
 			while (cursor.hasNext()) {
 				person = cursor.next();
-				// bulk load or single load?? --> change to bulk
-				comp = companyColl.find(eq("name", person.get("company"))).first();
-				if(comp !=null) {
-					domain = comp.get("domain").toString();
+
+				AggregateIterable<Document> q1 = peopleColl.aggregate(Arrays.asList(
+						new Document("$lookup", new Document()
+								.append("from", "Companies")
+								.append("localField", "worksIn")
+								.append("foreignField", "_id")
+								.append("as", "result")
+						)
+				));
+
+				for (Document d : q1 ) {
+					Document company = (Document) d.get("result", List.class).get(0);
+					System.out.println(d.get("firstName") + " " + d.get("lastName") + " works in " + company.get("_id"));
 				}
-				System.out.println(person.get("firstname") + " " + person.get("lastname") + "\t\t\t" + domain);
+
+				// bulk load or single load?? --> change to bulk
+//				comp = companyColl.find(eq("_id", person.get("worksIn"))).first();
+//				if(comp !=null) {
+//					domain = comp.get("domain").toString();
+//				}
+//				System.out.println(person.get("firstName") + " " + person.get("lastName") + " works in " + domain);
 			}
 		} finally {
 			cursor.close();
